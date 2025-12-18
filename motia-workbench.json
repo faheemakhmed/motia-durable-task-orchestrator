@@ -1,0 +1,29 @@
+[
+  {
+    "id": "basic-tutorial",
+    "config": {
+      "steps/state-audit-cron.step.ts": {
+        "x": 388,
+        "y": 45
+      }
+    }
+  },
+  {
+    "id": "TaskOrchestrator",
+    "config": {
+      "steps/submit-task.step.ts": {
+        "x": -76,
+        "y": -1927
+      }
+    }
+  },
+  {
+    "id": "durable-orchestrator",
+    "config": {
+      "steps\\submit-task.step.ts": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  }
+]
