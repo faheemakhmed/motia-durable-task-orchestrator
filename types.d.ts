@@ -12,6 +12,8 @@ declare module 'motia' {
   }
 
   interface Handlers {
-    'SubmitTask': ApiRouteHandler<Record<string, unknown>, unknown, never>
+    'TaskWorker': EventHandler<never, never>
+    'SubmitTask': ApiRouteHandler<Record<string, unknown>, unknown, { topic: 'task.submitted'; data: never }>
+    'GetTaskStatus': ApiRouteHandler<Record<string, unknown>, unknown, never>
   }
 }

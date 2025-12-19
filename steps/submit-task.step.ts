@@ -11,8 +11,9 @@ export const config: ApiRouteConfig = {
 };
 
 // 2. Handler: The actual business logic
-export const handler: Handlers['SubmitTask'] = async (req, { emit, logger, state }) => {
-  const { taskName, priority } = req.body;
+export const handler: Handlers['SubmitTask'] = async (req:any , { emit, logger, state }:any) => {
+  try {
+    const { taskName, priority } = req.body;
 
   // Validation
   if (!taskName) {
@@ -46,6 +47,15 @@ export const handler: Handlers['SubmitTask'] = async (req, { emit, logger, state
       taskId: taskId
     }
   };
+  } catch ( error :any) {
+    logger.error('Error in task submit', {error : error.message})
+    return {
+      status: 500,
+       body: {
+        message : "internal server error",
+       },
+    };
+  }
 };
 
 
