@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "motia dev --port 5000 --host 0.0.0.0",
-    "start": "motia start --host 0.0.0.0 --port 3000",
+    "start": "motia start --port 3000 --host 0.0.0.0",
     "build": "motia build",
     "test": "motia test"
   },
