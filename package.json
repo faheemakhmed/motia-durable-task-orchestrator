@@ -21,6 +21,8 @@
   "author": "Motia Template",
   "license": "MIT",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.2.3",
     "motia": "^0.6.4-beta.130",
     "zod": "^3.23.8"
   },

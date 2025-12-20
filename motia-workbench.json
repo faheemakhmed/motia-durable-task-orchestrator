@@ -1,0 +1,19 @@
+[
+  {
+    "id": "durable-orchestrator",
+    "config": {
+      "steps\\worker.step.ts": {
+        "x": 217,
+        "y": 34
+      },
+      "steps\\submit-task.step.ts": {
+        "x": 18,
+        "y": 0
+      },
+      "steps\\get-status.step.ts": {
+        "x": 0,
+        "y": 152
+      }
+    }
+  }
+]
