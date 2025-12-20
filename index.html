@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deep Research Agent</title>
+    <style>
+        body { font-family: 'Courier New', monospace; background: #050505; color: #00ff41; padding: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { border-bottom: 2px solid #00ff41; padding-bottom: 10px; }
+        
+        /* Input Area */
+        .input-group { display: flex; gap: 15px; margin-bottom: 30px; }
+        input { flex-grow: 1; padding: 15px; background: #111; border: 1px solid #333; color: white; font-family: inherit; font-size: 1.1em; }
+        button { padding: 15px 30px; background: #004400; border: 1px solid #00ff41; color: #00ff41; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #00ff41; color: black; }
+
+        /* Task Card */
+        .task-card { background: #0a0a0a; border: 1px solid #333; padding: 20px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
+        .status-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; }
+        
+        /* Progress Bar */
+        .progress-container { background: #222; height: 4px; width: 100%; margin: 15px 0; }
+        .progress-bar { background: #00ff41; height: 100%; width: 0%; transition: width 0.5s ease; box-shadow: 0 0 5px #00ff41; }
+        
+        /* Logs & Report */
+        .live-log { font-size: 0.9em; color: #888; height: 20px; }
+        .final-report { margin-top: 20px; padding: 20px; background: #111; border-left: 4px solid #00ff41; white-space: pre-wrap; color: #ddd; display: none; }
+        .final-report h2 { color: white; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>[ DEEP RESEARCH AGENT ]</h1>
+        <p>Enter a topic. Our autonomous agents will research, analyze, and report.</p>
+        
+        <div class="input-group">
+            <input type="text" id="topicInput" placeholder="e.g. The Future of Quantum Computing">
+            <button onclick="startResearch()">INITIATE</button>
+        </div>
+
+        <div id="resultsArea"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000'; 
+
+        async function startResearch() {
+            const topic = document.getElementById('topicInput').value;
+            if(!topic) return;
+
+            // Clear input
+            document.getElementById('topicInput').value = '';
+
+            // 1. Submit Request
+            try {
+                const res = await fetch(`${API_URL}/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic: topic })
+                });
+                const data = await res.json();
+                createAgentCard(data.taskId, topic);
+            } catch (e) { alert("API Error. Is the backend running?"); }
+        }
+
+        function createAgentCard(id, topic) {
+            const div = document.createElement('div');
+            div.className = 'task-card';
+            div.id = `card-${id}`;
+            div.innerHTML = `
+                <div class="status-line">
+                    <span>TOPIC: ${topic.toUpperCase()}</span>
+                    <span id="status-${id}">INITIALIZING...</span>
+                </div>
+                <div class="progress-container"><div class="progress-bar" id="bar-${id}"></div></div>
+                <div class="live-log" id="log-${id}">Connecting to agent swarm...</div>
+                <div class="final-report" id="report-${id}"></div>
+            `;
+            document.getElementById('resultsArea').prepend(div);
+            pollStatus(id);
+        }
+
+        function pollStatus(id) {
+            const interval = setInterval(async () => {
+                try {
+                    const res = await fetch(`${API_URL}/status/${id}`);
+                    const data = await res.json();
+                    
+                    // Update Status Text
+                    document.getElementById(`status-${id}`).innerText = data.status.toUpperCase();
+
+                    // Update Progress & Logs based on state
+                    // (In a real app, we would read the stream, but here we infer from our simulation logic)
+                    if (data.status === 'processing') {
+                         const bar = document.getElementById(`bar-${id}`);
+                         let currentWidth = parseInt(bar.style.width) || 5;
+                         if (currentWidth < 90) bar.style.width = (currentWidth + 10) + '%';
+                         
+                         // Update the "Thinking" log
+                         const steps = ["Scanning...", "Reading papers...", "Analyzing...", "Drafting..."];
+                         const randomStep = steps[Math.floor(Math.random() * steps.length)];
+                         document.getElementById(`log-${id}`).innerText = `> ${randomStep}`;
+                    } 
+                    
+                    if (data.status === 'completed') {
+                        clearInterval(interval);
+                        document.getElementById(`bar-${id}`).style.width = '100%';
+                        document.getElementById(`log-${id}`).innerText = '> MISSION COMPLETE';
+                        document.getElementById(`status-${id}`).style.color = '#00ff41';
+                        
+                        // Show the Report
+                        const reportDiv = document.getElementById(`report-${id}`);
+                        reportDiv.innerText = data.report || "No report generated.";
+                        reportDiv.style.display = 'block';
+                    }
+                } catch (e) { console.error(e); }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

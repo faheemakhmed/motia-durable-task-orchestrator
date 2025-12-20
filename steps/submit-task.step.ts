@@ -1,63 +1,49 @@
 import { ApiRouteConfig, Handlers } from 'motia';
 
-// 1. Configuration: Tells Motia how to trigger this code
 export const config: ApiRouteConfig = {
   name: 'SubmitTask',
   type: 'api',
   path: '/submit',
   method: 'POST',
-  emits: ['task.submitted'], // Declares that this step will trigger other steps
-  flows: ['durable-orchestrator'] // Groups this in the Workbench visualization
+  emits: ['task.submitted'],
+  flows: ['durable-orchestrator']
 };
 
-// 2. Handler: The actual business logic
-export const handler: Handlers['SubmitTask'] = async (req:any , { emit, logger, state }:any) => {
+export const handler: Handlers['SubmitTask'] = async (req: any, { emit, logger, state }: any) => {
   try {
-    const { taskName, priority } = req.body;
+    const { topic } = req.body; // CHANGED: We now expect a 'topic'
 
-  // Validation
-  if (!taskName) {
-    return { status: 400, body: { error: 'taskName is required' } };
-  }
-
-  logger.info('Received new task request', { taskName, priority });
-
-  // Initialize the task state in our "Ledger"
-  // We use the internal traceId as a unique Task ID
-  const taskId = Date.now().toString(); 
-  
-  await state.set('tasks', taskId, {
-    name: taskName,
-    status: 'received',
-    priority: priority || 'normal',
-    createdAt: new Date().toISOString()
-  });
-
-  // Emit the event to wake up the background worker
-  await emit({
-    topic: 'task.submitted',
-    data: { taskId, taskName }
-  });
-
-  // Respond immediately to the user
-  return {
-    status: 202,
-    body: {
-      message: 'Task accepted and queued for processing',
-      taskId: taskId
+    if (!topic) {
+      return { status: 400, body: { error: 'Topic is required' } };
     }
-  };
-  } catch ( error :any) {
-    logger.error('Error in task submit', {error : error.message})
+
+    logger.info('Received new research request', { topic });
+
+    const taskId = Date.now().toString(); 
+    
+    // Save initial state
+    await state.set('tasks', taskId, {
+      type: 'research-agent',
+      topic: topic,
+      status: 'received',
+      createdAt: new Date().toISOString()
+    });
+
+    await emit({
+      topic: 'task.submitted',
+      data: { taskId, topic } // Pass the topic to the worker
+    });
+
     return {
-      status: 500,
-       body: {
-        message : "internal server error",
-       },
+      status: 202,
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: {
+        message: 'Research Agent started',
+        taskId: taskId
+      }
     };
+  } catch (error: any) {
+    logger.error('Error in submit', { error: error.message });
+    return { status: 500, body: { message: "Internal server error" } };
   }
 };
-
-
-
-
