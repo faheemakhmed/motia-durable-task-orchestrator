@@ -1,4 +1,4 @@
-# 🔮 DURABLE RESEARCH ORCHESTRATOR
+# DURABLE RESEARCH ORCHESTRATOR
 
 > **"An autonomous agent that never forgets."**
 
@@ -6,21 +6,21 @@ The Durable Research Orchestrator is a fault-tolerant AI agent designed to perfo
 
 ---
 
-## 🔥 THE PROBLEM VS. THE SOLUTION
+## THE PROBLEM VS. THE SOLUTION
 
-### ❌ The Old Way (Fragile):
+###  The Old Way (Fragile):
 - If the server restarts mid-task, the progress is **lost forever**.
 - Long-running AI tasks often **time out**.
 - Debugging async flows is a **nightmare**.
 
-### ✅ The Durable Way (Robust):
+### The Durable Way (Robust):
 - The Orchestrator **"remembers"** its state and resumes exactly where it left off.
 - Workflows are **checkpointed** at every step using Motia.
 - **Motia Workbench** provides real-time visualization of the agent's logic.
 
 ---
 
-## 🏗️ ARCHITECTURE
+## ARCHITECTURE
 
 The system uses a **Durable Workflow Pattern**:
 
@@ -31,7 +31,7 @@ The system uses a **Durable Workflow Pattern**:
 
 ---
 
-## 🛠️ TECH STACK
+## TECH STACK
 
 | Component | Technology |
 |-----------|------------|
@@ -43,7 +43,7 @@ The system uses a **Durable Workflow Pattern**:
 
 ---
 
-## 🚀 INSTALLATION & SETUP
+## INSTALLATION & SETUP
 
 Follow these steps to run the **"Invincible Agent"** on your local machine.
 
@@ -79,7 +79,7 @@ Then visit `http://localhost:8000`.
 
 ---
 
-## 🧠 HOW WE USED MOTIA
+## HOW WE USED MOTIA
 
 This project relies entirely on **Motia's Durable Execution primitives**:
 
@@ -89,17 +89,17 @@ This project relies entirely on **Motia's Durable Execution primitives**:
 
 ---
 
-## 🎯 KEY FEATURES
+## KEY FEATURES
 
-- ✨ **Fault-Tolerant Execution** - Survives crashes and restarts
-- 🔄 **Automatic State Checkpointing** - Never lose progress
-- 👁️ **Real-Time Observability** - Watch your agent think
-- 🚀 **Production-Ready** - Deploy with confidence
-- 🎨 **Cyberpunk UI** - Because why not?
+- **Fault-Tolerant Execution** - Survives crashes and restarts
+- **Automatic State Checkpointing** - Never lose progress
+- **Real-Time Observability** - Watch your agent think
+- **Production-Ready** - Deploy with confidence
+- **Cyberpunk UI** - Because why not?
 
 ---
 
-## 📝 LICENSE
+## LICENSE
 
 This project is open source and available under the [MIT License](LICENSE).
 
